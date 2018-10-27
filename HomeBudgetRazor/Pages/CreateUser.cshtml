@@ -1,0 +1,20 @@
+﻿@page
+@model HomeBudgetRazor.Pages.CreateUserModel
+@{
+    ViewData["Title"] = "CreateUser";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<html>
+<body>
+    <p>
+        Enter your name.
+    </p>
+    <div asp-validation-summary="All"></div>
+    <form method="POST">
+        <div>Name: <input asp-for="User.Name" /></div>
+        <input type="submit" value="Send"/>
+    </form>
+</body>
+</html>
+

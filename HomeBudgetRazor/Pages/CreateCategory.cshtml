@@ -1,0 +1,21 @@
+﻿@page
+@model HomeBudgetRazor.Pages.CreateCategoryModel
+@{
+    ViewData["Title"] = "CreateCategory";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<html>
+<body>
+    <p>
+        Enter category details:
+    </p>
+    <div asp-validation-summary="All"></div>
+    <form method="POST">
+        <div>Name: <input asp-for="Category.Name" /></div>
+        <div>Description: <input asp-for="Category.Description" /></div>
+        <input type="submit" value="Send" />
+    </form>
+</body>
+</html>
+

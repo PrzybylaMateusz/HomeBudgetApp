@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeBudgetRazor", "HomeBudgetRazor\HomeBudgetRazor.csproj", "{5FAEDF20-B832-4751-A4CA-2F5F2B9C7555}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5FAEDF20-B832-4751-A4CA-2F5F2B9C7555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FAEDF20-B832-4751-A4CA-2F5F2B9C7555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FAEDF20-B832-4751-A4CA-2F5F2B9C7555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FAEDF20-B832-4751-A4CA-2F5F2B9C7555}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C6B3A96-2098-4E74-8D0A-03DDFABF98A8}
+	EndGlobalSection
+EndGlobal

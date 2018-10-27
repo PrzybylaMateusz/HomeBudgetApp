@@ -1,0 +1,42 @@
+﻿@page
+@model HomeBudgetRazor.Pages.ExpensesModel
+@{
+    ViewData["Title"] = "Expenses";
+}
+
+<h2>Your last expenses:</h2>
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var expense in Model.Expenses)
+            {
+                <tr>
+                    <td>@expense.Id</td>
+                    <td>@expense.DateOfExpense.ToString("dd MMM yyyy")</td>
+                    <td>@expense.Amount</td>
+                    <td>@expense.Category</td>
+                    <td>@expense.Description</td>
+                    <td>
+                        <a asp-page="./EditExpense" asp-route-id="@expense.Id">edit</a>
+                        <button type="submit" asp-page-handler="delete"
+                                asp-route-id="@expense.Id">
+                            delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-page="./AddExpense">Add new expence</a>
+</form>
+

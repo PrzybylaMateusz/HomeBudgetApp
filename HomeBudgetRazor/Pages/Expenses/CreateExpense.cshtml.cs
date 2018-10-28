@@ -10,28 +10,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeBudgetRazor.Pages
 {
-    public class AddExpenseModel : PageModel
+    public class CreateExpenseModel : PageModel
     {
         private readonly AppDbContext _db;
 
-        public AddExpenseModel(AppDbContext db)
+        public CreateExpenseModel(AppDbContext db)
         {
             _db = db;
         }
 
-        public IList<SelectListItem> Categories { get; private set; }
+        public IList<SelectListItem> AllCategories { get; private set; }
 
-        //public List<SelectListItem> Categories ;
 
         public async Task OnGetAsync()
         {
-            Categories = new List<SelectListItem>();
+            AllCategories = new List<SelectListItem>();
 
-            foreach (var category in await _db.Categories.AsNoTracking().Select(x => x.Name).ToListAsync())
+            foreach (var category in await _db.AllCategories.AsNoTracking().Select(x => x.Name).ToListAsync())
             {
-                Categories.Add(new SelectListItem { Text = category, Value = category });
+                AllCategories.Add(new SelectListItem { Text = category, Value = category });
             }
-            //Categories = await _db.Categories.AsNoTracking().Select(x => x.Name).ToListAsync();           
         }
 
         [BindProperty]
@@ -44,7 +42,7 @@ namespace HomeBudgetRazor.Pages
                 return Page();
             }
 
-            _db.Expenses.Add(Expense);
+            _db.AllExpenses.Add(Expense);
             await _db.SaveChangesAsync();
             return RedirectToPage("/Index");
         }

@@ -108,7 +108,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var expense in Model.Expenses)
+            @foreach (var expense in Model.AllExpenses)
             {
             <tr>
                 <td>@expense.Id</td>
@@ -128,35 +128,5 @@
         </tbody>
     </table>
 
-    <a asp-page="./AddExpense">Add new expence</a>
+    <a asp-page="./Expenses/CreateExpense">Add new expence</a>
 </form>
-
-@*<h1>Users</h1>
-<form method="post">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-                    <td>@user.Id</td>
-                    <td>@user.Name</td>
-                    <td>
-                        <a asp-page="./EditUser" asp-route-id="@user.Id">edit</a>
-                        <button type="submit" asp-page-handler="delete"
-                                asp-route-id="@user.Id">
-                            delete
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <a asp-page="./CreateUser">Create</a>
-</form>*@

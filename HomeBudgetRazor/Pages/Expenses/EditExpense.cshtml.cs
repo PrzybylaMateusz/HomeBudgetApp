@@ -1,27 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using HomeBudgetRazor.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using HomeBudgetRazor.Data;
 
 namespace HomeBudgetRazor.Pages
 {
-    public class EditUserModel : PageModel
+    public class EditExpenseModel : PageModel
     {
         private readonly AppDbContext _db;
 
-        public EditUserModel(AppDbContext db)
+        public EditExpenseModel(AppDbContext db)
         {
             _db = db;
         }
 
         [BindProperty]
-        public User User { get; set; }
+        public Expense Expense { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            User = await _db.Users.FindAsync(id);
+            Expense = await _db.AllExpenses.FindAsync(id);
 
             if (User == null)
             {
@@ -38,7 +40,7 @@ namespace HomeBudgetRazor.Pages
                 return Page();
             }
 
-            _db.Attach(User).State = EntityState.Modified;
+            _db.Attach(Expense).State = EntityState.Modified;
 
             try
             {
@@ -46,7 +48,7 @@ namespace HomeBudgetRazor.Pages
             }
             catch (DbUpdateConcurrencyException)
             {
-                throw new Exception($"User {User.Id} not found!");
+                throw new Exception($"Expense {Expense.Id} not found!");
             }
 
             return RedirectToPage("/Index");

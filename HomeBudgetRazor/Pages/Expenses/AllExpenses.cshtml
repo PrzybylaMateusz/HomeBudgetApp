@@ -1,7 +1,7 @@
 ﻿@page
-@model HomeBudgetRazor.Pages.ExpensesModel
+@model HomeBudgetRazor.Pages.AllExpensesModel
 @{
-    ViewData["Title"] = "Expenses";
+    ViewData["Title"] = "My all expenses";
 }
 
 <h2>Your last expenses:</h2>
@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var expense in Model.Expenses)
+            @foreach (var expense in Model.AllExpenses)
             {
                 <tr>
                     <td>@expense.Id</td>
@@ -37,6 +37,6 @@
         </tbody>
     </table>
 
-    <a asp-page="./AddExpense">Add new expence</a>
+    <a asp-page="./CreateExpense">Add new expence</a>
 </form>
 

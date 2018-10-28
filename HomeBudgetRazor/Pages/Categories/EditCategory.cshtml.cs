@@ -7,23 +7,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace HomeBudgetRazor.Pages
+namespace HomeBudgetRazor.Pages.Categories
 {
-    public class EditExpenseModel : PageModel
+    public class EditCategoryModel : PageModel
     {
         private readonly AppDbContext _db;
 
-        public EditExpenseModel(AppDbContext db)
+        public EditCategoryModel(AppDbContext db)
         {
             _db = db;
         }
 
         [BindProperty]
-        public Expense Expense { get; set; }
+        public Category Category { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Expense = await _db.Expenses.FindAsync(id);
+            Category = await _db.AllCategories.FindAsync(id);
 
             if (User == null)
             {
@@ -40,7 +40,7 @@ namespace HomeBudgetRazor.Pages
                 return Page();
             }
 
-            _db.Attach(Expense).State = EntityState.Modified;
+            _db.Attach(Category).State = EntityState.Modified;
 
             try
             {
@@ -48,10 +48,10 @@ namespace HomeBudgetRazor.Pages
             }
             catch (DbUpdateConcurrencyException)
             {
-                throw new Exception($"Expense {Expense.Id} not found!");
+                throw new Exception($"Category {Category.Id} not found!");
             }
 
-            return RedirectToPage("/Index");
+            return RedirectToPage("./AllCategories");
         }
     }
 }

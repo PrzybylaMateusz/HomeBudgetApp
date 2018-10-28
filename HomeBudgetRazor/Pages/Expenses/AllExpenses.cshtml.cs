@@ -9,33 +9,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeBudgetRazor.Pages
 {
-    public class CategoriesModel : PageModel
+    public class AllExpensesModel : PageModel
     {
         private readonly AppDbContext _db;
 
-        public CategoriesModel(AppDbContext db)
+        public AllExpensesModel(AppDbContext db)
         {
             _db = db;
         }
 
-        public IList<Category> Categories { get; private set; }
+        public IList<Expense> AllExpenses { get; private set; }
 
         public async Task OnGetAsync()
         {
-            Categories = await _db.Categories.AsNoTracking().ToListAsync();
+            AllExpenses = await _db.AllExpenses.AsNoTracking().ToListAsync();
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            var category = await _db.Categories.FindAsync(id);
+            var expense = await _db.AllExpenses.FindAsync(id);
 
-            if (category != null)
+            if (expense != null)
             {
-                _db.Categories.Remove(category);
+                _db.AllExpenses.Remove(expense);
                 await _db.SaveChangesAsync();
             }
 
-            return Redirect("/Categories");
+            return RedirectToPage();
         }
     }
 }

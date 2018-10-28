@@ -17,6 +17,9 @@ namespace HomeBudgetRazor.Pages
             _db = db;
         }
 
+        [TempData]
+        public string Message { get; set; }
+
         [BindProperty]
         public Category Category { get; set; }
 
@@ -27,9 +30,10 @@ namespace HomeBudgetRazor.Pages
                 return Page();
             }
 
-            _db.Categories.Add(Category);
+            _db.AllCategories.Add(Category);
             await _db.SaveChangesAsync();
-            return Redirect("/Categories");
+            Message = $"Category {Category.Name} added";
+            return Redirect("./AllCategories");
         }
     }
 }

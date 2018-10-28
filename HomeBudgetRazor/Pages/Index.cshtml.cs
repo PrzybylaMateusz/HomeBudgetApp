@@ -18,29 +18,20 @@ namespace HomeBudgetRazor.Pages
             _db = db;
         }
 
-        public IList<User> Users { get; private set; }
-        public IList<Expense> Expenses { get; private set; }
+        public IList<Expense> AllExpenses { get; private set; }
 
         public async Task OnGetAsync()
-        {
-            Users = await _db.Users.AsNoTracking().ToListAsync();
-            Expenses = await _db.Expenses.AsNoTracking().ToListAsync();
-
+        {           
+            AllExpenses = await _db.AllExpenses.AsNoTracking().ToListAsync();
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            var user = await _db.Users.FindAsync(id);
-            var expense = await _db.Expenses.FindAsync(id);
-
-            if (user != null)
-            {
-                _db.Users.Remove(user);
-                await _db.SaveChangesAsync();
-            }
+            var expense = await _db.AllExpenses.FindAsync(id);
+                       
             if (expense != null)
             {
-                _db.Expenses.Remove(expense);
+                _db.AllExpenses.Remove(expense);
                 await _db.SaveChangesAsync();
             }
 

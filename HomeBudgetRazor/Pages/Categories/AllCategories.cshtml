@@ -1,9 +1,9 @@
 ﻿@page
-@model HomeBudgetRazor.Pages.CategoriesModel
+@model HomeBudgetRazor.Pages.AllCategoriesModel
 @{
     ViewData["Title"] = "Categories";
 }
-
+<h5>@Model.Message</h5>
 <h1>Categories:</h1>
     <form method="post">
         <table class="table">
@@ -15,14 +15,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var category in Model.Categories)
+                @foreach (var category in Model.AllCategories)
                 {
                 <tr>
                     <td>@category.Id</td>
                     <td>@category.Name</td>
                     <td>@category.Description</td>
                     <td>
-                        <a asp-page="./EditUser" asp-route-id="@category.Id">edit</a>
+                        <a asp-page="./EditCategory" asp-route-id="@category.Id">edit</a>
                         <button type="submit" asp-page-handler="delete"
                                 asp-route-id="@category.Id">
                             delete
@@ -33,6 +33,6 @@
             </tbody>
         </table>
 
-        <a asp-page="./CreateCategory">Create</a>
+        <a asp-page="./CreateCategory">Add new category</a>
     </form>
 

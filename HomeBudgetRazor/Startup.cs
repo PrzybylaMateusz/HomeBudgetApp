@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using HomeBudgetRazor.Data;
+using HomeBudgetRazor.Models;
 
 
 namespace HomeBudgetRazor
@@ -33,9 +34,11 @@ namespace HomeBudgetRazor
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("name"));
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddDbContext<HomeBudgetRazorContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("HomeBudgetRazorContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

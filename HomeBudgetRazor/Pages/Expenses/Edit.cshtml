@@ -1,0 +1,50 @@
+﻿@page
+@model HomeBudgetRazor.Pages.Expenses.EditModel
+
+@{
+    ViewData["Title"] = "Edit Expense";
+}
+
+<h2>Edit</h2>
+
+<h4>Expense</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Expense.Id" />
+            <div class="form-group">
+                <label asp-for="Expense.DateOfExpense" class="control-label"></label>
+                <input asp-for="Expense.DateOfExpense" class="form-control" />
+                <span asp-validation-for="Expense.DateOfExpense" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Expense.Amount" class="control-label"></label>
+                <input asp-for="Expense.Amount" class="form-control" />
+                <span asp-validation-for="Expense.Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Expense.Category" class="control-label"></label>
+                <input asp-for="Expense.Category" class="form-control" />
+                <span asp-validation-for="Expense.Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Expense.Description" class="control-label"></label>
+                <input asp-for="Expense.Description" class="form-control" />
+                <span asp-validation-for="Expense.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

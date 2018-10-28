@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using HomeBudgetRazor.Data;
 
 namespace HomeBudgetRazor.Models
@@ -14,7 +10,7 @@ namespace HomeBudgetRazor.Models
         {
         }
 
-        public DbSet<HomeBudgetRazor.Data.Category> Category { get; set; }
-        public DbSet<HomeBudgetRazor.Data.Expense> Expense { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Expense> Expense { get; set; }
     }
 }

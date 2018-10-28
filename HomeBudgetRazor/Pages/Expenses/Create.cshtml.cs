@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HomeBudgetRazor.Data;
-using HomeBudgetRazor.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeBudgetRazor.Pages.Expenses
 {
     public class CreateModel : PageModel
     {
-        private readonly HomeBudgetRazor.Models.HomeBudgetRazorContext _context;
+        private readonly Models.HomeBudgetRazorContext _context;
 
-        public CreateModel(HomeBudgetRazor.Models.HomeBudgetRazorContext context)
+        public CreateModel(Models.HomeBudgetRazorContext context)
         {
             _context = context;
         }
-
-        //public IActionResult OnGet()
-        //{
-            //return Page();
-        //}
 
         [BindProperty]
         public Expense Expense { get; set; }

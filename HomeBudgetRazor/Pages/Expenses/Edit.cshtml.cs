@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HomeBudgetRazor.Data;
-using HomeBudgetRazor.Models;
 
 namespace HomeBudgetRazor.Pages.Expenses
 {
     public class EditModel : PageModel
     {
-        private readonly HomeBudgetRazor.Models.HomeBudgetRazorContext _context;
+        private readonly Models.HomeBudgetRazorContext _context;
 
-        public EditModel(HomeBudgetRazor.Models.HomeBudgetRazorContext context)
+        public EditModel(Models.HomeBudgetRazorContext context)
         {
             _context = context;
         }

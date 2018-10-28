@@ -14,8 +14,7 @@ namespace HomeBudgetRazor.Data
         [Display(Name = "Date of expense")]
         [DataType(DataType.Date)]
         public DateTime DateOfExpense { get; set; }
-        //[Column(TypeName = "decimal(18, 2)")]
-        //[DataType(DataType.Currency)]
+
         //[Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
 

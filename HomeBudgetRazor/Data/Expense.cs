@@ -11,14 +11,18 @@ namespace HomeBudgetRazor.Data
     {
         public int Id { get; set; }
 
+        public bool Select { get; set; }
+
         [Display(Name = "Date of expense")]
         [DataType(DataType.Date)]
+        [Required]
         public DateTime DateOfExpense { get; set; }
 
         //[Column(TypeName = "decimal(18, 2)")]
+        [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 
-        [Required, StringLength(100)]
+        [Required]
         public string Category { get; set; }
 
         public string Description { get; set; }

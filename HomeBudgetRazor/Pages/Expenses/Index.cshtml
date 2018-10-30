@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Expenses";
 }
+
 <h3>Expenses:</h3>
 <p>
     <a asp-page="Create">Add New</a>
@@ -24,6 +25,8 @@
     <thead>
         <tr>
             <th>
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Expense[0].DateOfExpense)
             </th>
             <th>
@@ -42,6 +45,10 @@
         @foreach (var item in Model.Expense)
         {
             <tr>
+                <td>
+                    @Html.EditorFor(model => model.Expense[0].Select)
+
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateOfExpense)
                 </td>
@@ -63,3 +70,37 @@
         }
     </tbody>
 </table>
+<h3>Sum: @Model.Sum</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">            
+            <div id="chart1"></div>
+        </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(@Html.Raw(Model.StringForChart), false);
+
+            // Simple Pie Chart:
+            var option = {
+                title: 'Expenses by category: ',
+                width: 500,
+                height: 400
+            };
+
+            var formatter = new google.visualization.NumberFormat({ decimalSymbol: ',' });
+            formatter.format(data, 1);
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart1'));
+
+            chart.draw(data, option);           
+        }
+    </script>
+}

@@ -28,7 +28,7 @@ namespace HomeBudgetRazor.Pages.Expenses
         public decimal Sum { get; set; }        
         public string StringForChart { get; set; }
 
-        public async Task OnGetAsync(string expenseCategory, string searchString)
+        public async Task OnGetAsync(string expenseCategory, DateTime dateFrom, DateTime dateTo, string searchString)
         {
             IQueryable<string> categoryQuery = from m in _context.Category
                                             orderby m.Name
@@ -47,6 +47,14 @@ namespace HomeBudgetRazor.Pages.Expenses
             if (!String.IsNullOrEmpty(expenseCategory))
             {
                 expenses = expenses.Where(x => x.Category == expenseCategory);
+            }
+            if (dateFrom.Year != 1)
+            {
+                expenses = expenses.Where(x => x.DateOfExpense >= dateFrom);
+            }            
+            if(dateTo.Year != 1)
+            {
+                expenses = expenses.Where(x => x.DateOfExpense <= dateTo);
             }
 
             Sum = expenses.Sum(x => x.Amount);

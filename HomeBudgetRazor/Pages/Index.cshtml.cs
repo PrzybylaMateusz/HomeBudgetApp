@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using HomeBudgetRazor.Data;
 using HomeBudgetRazor.Models;
@@ -20,10 +21,28 @@ namespace HomeBudgetRazor.Pages
         }
 
         public IList<Expense> Expense { get; set; }
+        public string StringForChart { get; set; }
+
 
         public async Task OnGetAsync()
         {
             Expense = await _context.Expense.ToListAsync();
+
+            StringForChart = CreateStringForChart();
+        }
+
+        private string CreateStringForChart()
+        {
+            Dictionary<string, decimal> amountByCategory = _context.Expense.GroupBy(m => m.Category).ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("[['Category', 'Amount'],");
+            foreach (var item in amountByCategory)
+            {
+                sb.AppendFormat("['{0}', {1}],", item.Key, item.Value.ToString().Replace(",", "."));
+            }
+            sb.AppendFormat("]");
+            return sb.ToString();
         }
         //public async Task OnGetAsync()
         //{           

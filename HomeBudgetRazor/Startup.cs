@@ -12,7 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using HomeBudgetRazor.Data;
 using HomeBudgetRazor.Models;
-
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace HomeBudgetRazor
 {
@@ -53,6 +54,15 @@ namespace HomeBudgetRazor
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            var defaultCulture = new CultureInfo("pl-PL");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(defaultCulture),
+                SupportedCultures = new List<CultureInfo> { defaultCulture },
+                SupportedUICultures = new List<CultureInfo> { defaultCulture }
+            };
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -14,6 +14,7 @@ using HomeBudgetRazor.Data;
 using HomeBudgetRazor.Models;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Identity;
 
 namespace HomeBudgetRazor
 {
@@ -37,6 +38,10 @@ namespace HomeBudgetRazor
             });
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddDefaultIdentity<IdentityUser>()
+        .AddEntityFrameworkStores<HomeBudgetRazorContext>();
+
 
             services.AddDbContext<HomeBudgetRazorContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("HomeBudgetRazorContext")));
@@ -66,6 +71,7 @@ namespace HomeBudgetRazor
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc();

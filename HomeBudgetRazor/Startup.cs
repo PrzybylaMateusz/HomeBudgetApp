@@ -15,6 +15,8 @@ using HomeBudgetRazor.Models;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace HomeBudgetRazor
 {
@@ -44,7 +46,7 @@ namespace HomeBudgetRazor
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars =1;
+                options.Password.RequiredUniqueChars = 1;
 
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                 options.Lockout.MaxFailedAccessAttempts = 10;
@@ -53,9 +55,14 @@ namespace HomeBudgetRazor
                 options.User.RequireUniqueEmail = false;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDefaultIdentity<IdentityUser>()
+           
+            services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<HomeBudgetRazorContext>();
 
 
@@ -63,7 +70,7 @@ namespace HomeBudgetRazor
                     options.UseSqlServer(Configuration.GetConnectionString("HomeBudgetRazorContext")));
         }
 
-        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

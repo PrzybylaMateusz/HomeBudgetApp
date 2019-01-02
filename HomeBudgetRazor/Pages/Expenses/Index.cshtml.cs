@@ -9,6 +9,7 @@ using System;
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
+using System.Security.Claims;
 
 namespace HomeBudgetRazor.Pages.Expenses
 {
@@ -35,10 +36,12 @@ namespace HomeBudgetRazor.Pages.Expenses
                                             select m.Name;
 
 
-            var expenses = from e in _context.Expense
-                           select e;
+            var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            StringForChart = CreateStringForChart();           
+            var expenses = from e in _context.Expense where e.OwnerID == currentUser
+                           select e ;
+      
+            StringForChart = CreateStringForChart(currentUser);           
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -63,9 +66,9 @@ namespace HomeBudgetRazor.Pages.Expenses
             SearchString = searchString;
         }
 
-        private string CreateStringForChart()
+        private string CreateStringForChart(string currentUser)
         {
-            Dictionary<string, decimal> amountByCategory = _context.Expense.GroupBy(m => m.Category).ToDictionary(g => g.Key, g => g.Sum(x=>x.Amount));
+            Dictionary<string, decimal> amountByCategory = _context.Expense.Where(x=>x.OwnerID == currentUser).GroupBy(m => m.Category).ToDictionary(g => g.Key, g => g.Sum(x=>x.Amount));
 
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("[['Category', 'Amount'],");

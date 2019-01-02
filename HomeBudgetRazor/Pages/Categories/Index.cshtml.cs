@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using HomeBudgetRazor.Data;
 using HomeBudgetRazor.Models;
+using System.Security.Claims;
 
 namespace HomeBudgetRazor.Pages.Categories
 {
@@ -23,7 +24,9 @@ namespace HomeBudgetRazor.Pages.Categories
 
         public async Task OnGetAsync()
         {
-            Category = await _context.Category.ToListAsync();
+            var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            Category = await _context.Category.Where(x=>x.OwnerID == currentUser).ToListAsync();
         }
     }
 }

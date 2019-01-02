@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HomeBudgetRazor.Data;
 using HomeBudgetRazor.Models;
+using System.Security.Claims;
 
 namespace HomeBudgetRazor.Pages.Categories
 {
@@ -33,6 +34,8 @@ namespace HomeBudgetRazor.Pages.Categories
             {
                 return Page();
             }
+
+            Category.OwnerID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             _context.Category.Add(Category);
             await _context.SaveChangesAsync();

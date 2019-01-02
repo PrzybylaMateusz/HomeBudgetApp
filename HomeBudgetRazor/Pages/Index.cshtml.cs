@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using HomeBudgetRazor.Data;
@@ -10,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeBudgetRazor.Pages
 {
-    [AllowAnonymous]
     public class IndexModel : PageModel
     {
         private readonly HomeBudgetRazorContext _context;
@@ -26,14 +26,15 @@ namespace HomeBudgetRazor.Pages
 
         public async Task OnGetAsync()
         {
-            Expense = await _context.Expense.ToListAsync();
+            var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            Expense = await _context.Expense.Where(x => x.OwnerID == currentUser).ToListAsync();
 
-            StringForChart = CreateStringForChart();
+            StringForChart = CreateStringForChart(currentUser);
         }
 
-        private string CreateStringForChart()
+        private string CreateStringForChart(string currentUser)
         {
-            Dictionary<string, decimal> amountByCategory = _context.Expense.GroupBy(m => m.Category).ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
+            Dictionary<string, decimal> amountByCategory = _context.Expense.Where(x=>x.OwnerID == currentUser).GroupBy(m => m.Category).ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
 
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("[['Category', 'Amount'],");

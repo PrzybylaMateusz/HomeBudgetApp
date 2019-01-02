@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HomeBudgetRazor.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HomeBudgetRazor.Pages.Expenses
 {
@@ -26,8 +27,9 @@ namespace HomeBudgetRazor.Pages.Expenses
         public async Task<IActionResult> OnGetAsync()
         {
             AllCategories = new List<SelectListItem>();
+            var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            foreach (var category in await _context.Category.Select(x=>x.Name).ToListAsync())
+            foreach (var category in await _context.Category.Where(o=>o.OwnerID == currentUser).Select(x=>x.Name).ToListAsync())
             {
                 AllCategories.Add(new SelectListItem { Text = category, Value = category });
             }
@@ -41,7 +43,7 @@ namespace HomeBudgetRazor.Pages.Expenses
             {
                 return Page();
             }
-
+            Expense.OwnerID = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             _context.Expense.Add(Expense);
             await _context.SaveChangesAsync();
 

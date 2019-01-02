@@ -15,5 +15,7 @@ namespace HomeBudgetRazor.Data
 
         [StringLength(300)]
         public string Description { get; set; }
+
+        public string OwnerID { get; set; }
     }
 }

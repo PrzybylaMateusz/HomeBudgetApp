@@ -59,7 +59,7 @@ namespace HomeBudgetRazor
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
            
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()

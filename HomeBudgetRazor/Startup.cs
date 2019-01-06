@@ -61,7 +61,8 @@ namespace HomeBudgetRazor
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-           
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<HomeBudgetRazorContext>();
 

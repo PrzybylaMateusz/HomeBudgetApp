@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using HomeBudgetRazor.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +62,8 @@ namespace HomeBudgetRazor.Pages
                 foreach(var expense in expenses)
                 {
                     row = excelSheet.CreateRow(i);
-                    row.CreateCell(0).SetCellValue(expense.DateOfExpense);
+                    row.CreateCell(0).SetCellValue(expense.DateOfExpense.ToString("dd/MM/yyyy"));
+                    
                     row.CreateCell(1).SetCellValue(expense.Amount.ToString());
                     row.CreateCell(2).SetCellValue(expense.Category);
                     row.CreateCell(3).SetCellValue(expense.Description);
@@ -79,7 +81,7 @@ namespace HomeBudgetRazor.Pages
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
         }
 
-        public ActionResult OnPostImport()
+        public async Task<IActionResult> OnPostImport()
         {
             IFormFile file = Request.Form.Files[0];
             string folderName = "Upload";
@@ -109,41 +111,37 @@ namespace HomeBudgetRazor.Pages
                         XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
                         sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
                     }
-                    IRow headerRow = sheet.GetRow(0); //Get Header Row
-                    int cellCount = headerRow.LastCellNum;
-                    sb.Append("<table class='table'><tr>");
-                    for (int j = 0; j < cellCount; j++)
-                    {
-                        NPOI.SS.UserModel.ICell cell = headerRow.GetCell(j);
-                        if (cell == null || string.IsNullOrWhiteSpace(cell.ToString())) continue;
-                        sb.Append("<th>" + cell.ToString() + "</th>");
-                    }
-                    sb.Append("</tr>");
-                    sb.AppendLine("<tr>");
+
+                    
+
                     for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++) //Read Excel File
                     {
+                        var expense = new Expense();
                         IRow row = sheet.GetRow(i);
                         if (row == null) continue;
                         if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
 
-                        System.Globalization.CultureInfo cultureinfo = System.Globalization.CultureInfo.CurrentCulture;
-                        DateTime dt = DateTime.Parse(row.GetCell(row.FirstCellNum).ToString(), cultureinfo);
-
                         if (row.GetCell(row.FirstCellNum) != null)
-                            sb.Append("<td>" + dt + "</td>");
+                            expense.DateOfExpense = Convert.ToDateTime(row.GetCell(row.FirstCellNum).ToString());
+                        if (row.GetCell(row.FirstCellNum+1) != null)
+                            expense.Amount = Convert.ToDecimal(row.GetCell(row.FirstCellNum+1).ToString());
+                        if (row.GetCell(row.FirstCellNum + 2) != null)
+                            expense.Category = row.GetCell(row.FirstCellNum + 2).ToString();
+                        if (row.GetCell(row.FirstCellNum + 3) != null)
+                            expense.Description= row.GetCell(row.FirstCellNum + 3).ToString();
 
-                        for (int j = row.FirstCellNum+1; j < cellCount; j++)
-                        {
-                            if (row.GetCell(j) != null)
-                                sb.Append("<td>" + row.GetCell(j).ToString() + "</td>");
-                        }
-                        sb.AppendLine("</tr>");
+                        //expense.Id = _context.Expense.Select(x => x.Id).Max() + 1;
+
+                        var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                        expense.OwnerID = currentUser;
+                        _context.Expense.Add(expense);
                     }
-                    sb.Append("</table>");
+
+
+                    await _context.SaveChangesAsync();                 
                 }
             }
-            return this.Content(sb.ToString());
+            return RedirectToPage("./Index");
         }
-
     }
 }

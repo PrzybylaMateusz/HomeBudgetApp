@@ -11,9 +11,8 @@
 
 <form>
     <p>
-        Category: <select asp-for="ExpenseCategory" asp-items="Model.Categories">
-            <option value="">All</option>
-        </select>
+        <input type="hidden" name="categories" id="categories" value="" />
+        <select class="multiple_categories_selection" multiple="multiple"></select>
     </p>
     <p>
         Date from: <input type="date" name="DateFrom" /> to: <input type="date" name="DateTo" />
@@ -78,12 +77,17 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">            
-            <div id="chart1"></div>
+        <div class="col-md-6">
+            <div id="expensesChart"></div>
         </div>
+    </div>
 </div>
 
+
 @section scripts{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         google.charts.load('current', { 'packages': ['corechart'] });
@@ -92,7 +96,6 @@
         function drawChart() {
             var data = google.visualization.arrayToDataTable(@Html.Raw(Model.StringForChart), false);
 
-            // Simple Pie Chart:
             var option = {
                 title: 'Expenses by category: ',
                 width: 500,
@@ -102,9 +105,27 @@
             var formatter = new google.visualization.NumberFormat({ decimalSymbol: ',' });
             formatter.format(data, 1);
 
-            var chart = new google.visualization.PieChart(document.getElementById('chart1'));
+            var chart = new google.visualization.PieChart(document.getElementById('expensesChart'));
 
-            chart.draw(data, option);           
+            chart.draw(data, option);
         }
+    </script>
+    <script type="text/javascript">
+            var categoriesArray = @Html.Raw(Json.Serialize(Model.CategoriesArray));
+            var dataForSelect2 = [];
+
+            for (i = 0; i < categoriesArray.length; i++) {
+                dataForSelect2.push({ id: i, text: categoriesArray[i] });
+            }
+
+            $(document).ready(function () {
+                $('.multiple_categories_selection').select2({
+                    data: dataForSelect2
+                }).on('select2:select', function (e) {
+                    var selectedCategory = e.params.data;
+                    var currentlySelected = $("#categories").val();
+                    $("#categories").val(currentlySelected + "," + selectedCategory.text);
+                });
+            });
     </script>
 }

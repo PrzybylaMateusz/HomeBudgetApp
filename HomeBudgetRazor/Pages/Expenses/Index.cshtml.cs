@@ -6,8 +6,6 @@ using HomeBudgetRazor.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System;
-using System.Data;
-using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Security.Claims;
 
@@ -24,32 +22,33 @@ namespace HomeBudgetRazor.Pages.Expenses
 
         public IList<Expense> Expense { get;set; }
         public string SearchString { get; set; }
-        public SelectList Categories { get; set; }
+        public string[] CategoriesArray { get; set; }
         public string ExpenseCategory { get; set; }
         public decimal Sum { get; set; }        
         public string StringForChart { get; set; }
+        public string SelectedCategories { get; set; }
 
-        public async Task OnGetAsync(string expenseCategory, DateTime dateFrom, DateTime dateTo, string searchString)
+        public async Task OnGetAsync(string categories, DateTime dateFrom, DateTime dateTo, string searchString)
         {
-            IQueryable<string> categoryQuery = from m in _context.Category
-                                            orderby m.Name
-                                            select m.Name;
-
-
             var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            IQueryable<string> categoryQuery = from m in _context.Category
+                                            orderby m.Name where m.OwnerID == currentUser
+                                            select m.Name;      
 
             var expenses = from e in _context.Expense where e.OwnerID == currentUser
                            select e ;
       
-            StringForChart = CreateStringForChart(currentUser);           
+            StringForChart = CreateStringForChart(currentUser);            
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 expenses = expenses.Where(s => s.Description.Contains(searchString));
             }
-            if (!String.IsNullOrEmpty(expenseCategory))
+            if (!String.IsNullOrEmpty(categories))
             {
-                expenses = expenses.Where(x => x.Category == expenseCategory);
+                var arrayCategories = categories.Split(",");
+                expenses = expenses.Where(x => arrayCategories.Contains(x.Category));
             }
             if (dateFrom.Year != 1)
             {
@@ -61,9 +60,12 @@ namespace HomeBudgetRazor.Pages.Expenses
             }
 
             Sum = expenses.Sum(x => x.Amount);
-            Categories = new SelectList(await categoryQuery.Distinct().ToListAsync());
+            CategoriesArray = await categoryQuery.Distinct().ToArrayAsync();
+
+
             Expense = await expenses.ToListAsync();
             SearchString = searchString;
+            SelectedCategories = categories;
         }
 
         private string CreateStringForChart(string currentUser)

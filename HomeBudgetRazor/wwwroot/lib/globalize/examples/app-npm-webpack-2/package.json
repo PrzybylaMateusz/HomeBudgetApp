@@ -7,7 +7,7 @@
     "html-webpack-plugin": "^1.1.0",
     "nopt": "^3.0.3",
     "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0"
+    "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
     "start": "webpack-dev-server --config webpack-config.js --hot --progress --colors --inline",
